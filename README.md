@@ -1,4 +1,4 @@
-# price-calculator
+# Price Calculator
 
 This repository is the coding exercise for Maxwell
 
