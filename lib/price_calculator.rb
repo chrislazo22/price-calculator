@@ -53,7 +53,7 @@ class PriceCalculator
   end
 
   def calculate_total
-    @total = itemized_list.values.map { |details| details[1] }.sum
+    @total = itemized_list.values.map { |details| details[1] }.sum.round(2)
   end
 
   def calculate_savings
