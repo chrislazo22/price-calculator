@@ -29,8 +29,7 @@ class PriceCalculator
       puts "#{item.capitalize}#{first_space}#{details[0]}#{second_space}$#{details[1]}"
     end
 
-    puts ''
-    puts "Total Price: $#{total}"
+    puts "\nTotal Price: $#{total}"
     puts "You saved $#{savings} today."
   end
 
@@ -48,6 +47,11 @@ class PriceCalculator
     end
   end
 
+  def item_total(normal_quantity, sale_quantity, item)
+    (normal_quantity * store_items.fetch(item, 0) +
+     sale_quantity * sale_items.fetch(item, 0)[1]).round(2)
+  end
+
   def calculate_total
     @total = itemized_list.values.map { |details| details[1] }.sum
   end
@@ -60,11 +64,6 @@ class PriceCalculator
     @savings = (no_savings_cost - total).round(2)
   end
 
-  def item_total(normal_quantity, sale_quantity, item)
-    (normal_quantity * store_items.fetch(item, 0) +
-     sale_quantity * sale_items.fetch(item, 0)[1]).round(2)
-  end
-
   def format_grocery_list(grocery_list)
     grocery_list.split(',').map do |item|
       item.strip.downcase.to_sym
@@ -72,22 +71,14 @@ class PriceCalculator
   end
 
   def store_items
-    {
-      apple: 0.89,
-      banana: 0.99,
-      bread: 2.17,
-      milk: 3.97
-    }
+    { apple: 0.89, banana: 0.99, bread: 2.17, milk: 3.97 }
   end
 
   def sale_items
-    {
-      bread: [3.00, 2.00],
-      milk: [2.00, 2.50]
-    }
+    { bread: [3.00, 2.00], milk: [2.00, 2.50] }
   end
 end
 
 print "Please enter all the items purchased separated by a comma: \n"
-grocery_list = gets.chomp
+grocery_list = gets
 PriceCalculator.new(grocery_list)
