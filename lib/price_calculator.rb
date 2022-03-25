@@ -4,18 +4,18 @@ class PriceCalculator
   attr_reader :grocery_list, :itemized_list
 
   def initialize(grocery_list)
-    @grocery_list  = grocery_list.split(',').map(&:strip).sort
-    @itemized_list = create_itemized_list
+    @grocery_list = format_grocery_list(grocery_list)
+    @itemized_list = {}
 
     perform
   end
 
   def perform
-    calculate_item_total
+    calculate_list_total
   end
 
-  def calculate_item_total
-    itemized_list.each do |item, quantity|
+  def calculate_list_total
+    grocery_list.each do |item, quantity|
       normal_quantity = quantity
       sale_quantity = 0
 
@@ -24,17 +24,18 @@ class PriceCalculator
         sale_quantity = quantity - normal_quantity
       end
 
-      total = normal_quantity * store_items.fetch(item.to_sym, 0) + sale_quantity * sale_items.fetch(item.to_sym, 0)[1]
-
-      itemized_list[item] = [quantity, total]
+      itemized_list[item] = [quantity, item_total(normal_quantity, sale_quantity, item)]
     end
   end
 
-  # can use tally method in the future to make this process easier
-  def create_itemized_list
-    grocery_list.each_with_object(Hash.new(0)) do |item, items|
-      items[item] += 1
-    end
+  def item_total(normal_quantity, sale_quantity, item)
+    normal_quantity * store_items.fetch(item, 0) + sale_quantity * sale_items.fetch(item, 0)[1]
+  end
+
+  def format_grocery_list(grocery_list)
+    grocery_list.split(',').map do |item|
+      item.strip.downcase.to_sym
+    end.tally
   end
 
   def store_items
