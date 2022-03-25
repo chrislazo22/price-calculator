@@ -12,7 +12,7 @@ This repository is the coding exercise for Maxwell
 
 ## Getting Started
 1. `ruby lib/price_calculator.rb`
-* This will ask user to input a grocery list (e.g 'milk, bread, apples, milk')
+* This will ask user to input a grocery list (e.g 'milk, bread, apple, milk')
 2. Output will be an itemized list of item total, grand total and savings amount
 
 ## Thanks!
